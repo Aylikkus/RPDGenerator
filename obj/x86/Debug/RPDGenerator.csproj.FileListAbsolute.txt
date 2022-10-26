@@ -1,0 +1,8 @@
+C:\Users\4l1kk\source\repos\RPDGenerator\bin\Debug\ConsoleApplication.exe.config
+C:\Users\4l1kk\source\repos\RPDGenerator\bin\Debug\ConsoleApplication.exe
+C:\Users\4l1kk\source\repos\RPDGenerator\bin\Debug\ConsoleApplication.pdb
+C:\Users\4l1kk\source\repos\RPDGenerator\obj\x86\Debug\RPDGenerator.csproj.AssemblyReference.cache
+C:\Users\4l1kk\source\repos\RPDGenerator\obj\x86\Debug\RPDGenerator.csproj.SuggestedBindingRedirects.cache
+C:\Users\4l1kk\source\repos\RPDGenerator\obj\x86\Debug\RPDGenerator.csproj.CoreCompileInputs.cache
+C:\Users\4l1kk\source\repos\RPDGenerator\obj\x86\Debug\ConsoleApplication.exe
+C:\Users\4l1kk\source\repos\RPDGenerator\obj\x86\Debug\ConsoleApplication.pdb

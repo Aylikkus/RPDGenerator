@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32929.385
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RPDGenerator", "RPDGenerator.csproj", "{9BC63E0F-FE75-4A32-8A83-15FF49B9B0C5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9BC63E0F-FE75-4A32-8A83-15FF49B9B0C5}.Debug|x86.ActiveCfg = Debug|x86
+		{9BC63E0F-FE75-4A32-8A83-15FF49B9B0C5}.Debug|x86.Build.0 = Debug|x86
+		{9BC63E0F-FE75-4A32-8A83-15FF49B9B0C5}.Release|x86.ActiveCfg = Release|x86
+		{9BC63E0F-FE75-4A32-8A83-15FF49B9B0C5}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D6062D80-D882-4593-B3C5-067DCB227774}
+	EndGlobalSection
+EndGlobal
