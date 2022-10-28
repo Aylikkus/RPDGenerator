@@ -7,6 +7,8 @@ namespace RPDGenerator
     {
         static void Main()
         {
+            Console.WriteLine("IAS");
+            Console.ReadLine();
         }
     }
 }
