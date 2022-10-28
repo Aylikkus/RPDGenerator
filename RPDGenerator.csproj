@@ -80,6 +80,7 @@
     <Folder Include=".git\refs\tags\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data\Discipline.cs" />
     <Compile Include="Data\DocAttributes.cs" />
     <Compile Include="Data\EducationType.cs" />
     <Compile Include="ExcelReader\ExcelReader.cs" />

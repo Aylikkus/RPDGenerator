@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace RPDGenerator.Data
 {
@@ -15,7 +16,7 @@ namespace RPDGenerator.Data
         /// <summary>
         /// Дисциплина
         /// </summary>
-        public string Discipline { get; set; }
+        public List<Discipline> Disciplines { get; set; }
         /// <summary>
         /// Специализация
         /// </summary>
