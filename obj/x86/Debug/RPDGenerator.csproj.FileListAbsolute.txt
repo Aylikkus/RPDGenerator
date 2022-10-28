@@ -6,3 +6,11 @@ C:\Users\4l1kk\source\repos\RPDGenerator\obj\x86\Debug\RPDGenerator.csproj.Sugge
 C:\Users\4l1kk\source\repos\RPDGenerator\obj\x86\Debug\RPDGenerator.csproj.CoreCompileInputs.cache
 C:\Users\4l1kk\source\repos\RPDGenerator\obj\x86\Debug\ConsoleApplication.exe
 C:\Users\4l1kk\source\repos\RPDGenerator\obj\x86\Debug\ConsoleApplication.pdb
+C:\Users\HONOR\Desktop\ТЗ\bin\Debug\ConsoleApplication.exe.config
+C:\Users\HONOR\Desktop\ТЗ\bin\Debug\ConsoleApplication.exe
+C:\Users\HONOR\Desktop\ТЗ\bin\Debug\ConsoleApplication.pdb
+C:\Users\HONOR\Desktop\ТЗ\obj\x86\Debug\RPDGenerator.csproj.AssemblyReference.cache
+C:\Users\HONOR\Desktop\ТЗ\obj\x86\Debug\RPDGenerator.csproj.SuggestedBindingRedirects.cache
+C:\Users\HONOR\Desktop\ТЗ\obj\x86\Debug\RPDGenerator.csproj.CoreCompileInputs.cache
+C:\Users\HONOR\Desktop\ТЗ\obj\x86\Debug\ConsoleApplication.exe
+C:\Users\HONOR\Desktop\ТЗ\obj\x86\Debug\ConsoleApplication.pdb

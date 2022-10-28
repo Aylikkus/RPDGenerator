@@ -6,5 +6,6 @@ namespace RPDGenerator.WordGenerator
 {
     static class WordGenerator
     {
+        
     }
 }
