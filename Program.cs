@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RPDGenerator.Data;
+using System;
 
 namespace RPDGenerator
 {
@@ -6,6 +7,8 @@ namespace RPDGenerator
     {
         static void Main()
         {
+            Console.WriteLine("IAS");
+            Console.ReadLine();
         }
     }
 }
