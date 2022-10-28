@@ -1,8 +1,10 @@
 ﻿using System;
 
+using Word = Microsoft.Office.Interop.Word;
+
 namespace RPDGenerator.WordGenerator
 {
-    class WordGenerator
+    static class WordGenerator
     {
     }
 }
