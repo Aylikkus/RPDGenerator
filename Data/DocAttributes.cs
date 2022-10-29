@@ -36,7 +36,7 @@ namespace RPDGenerator.Data
         /// <summary>
         /// Форма обучения (очная, заочная)
         /// </summary>
-        public EducationType EducationType { get; set; }
+        public string EducationType { get; set; }
         /// <summary>
         /// Год набора
         /// </summary>
