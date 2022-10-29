@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace RPDGenerator.Data
 {
-    struct DocAttributes
+    public struct DocAttributes
     {
         /// <summary>
         /// Кафедра
