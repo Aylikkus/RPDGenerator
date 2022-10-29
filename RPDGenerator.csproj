@@ -84,6 +84,7 @@
     <Compile Include="Data\DocAttributes.cs" />
     <Compile Include="Data\EducationLevelFactory.cs" />
     <Compile Include="Data\EducationTypeFactory.cs" />
+    <Compile Include="Data\ProfileFactory.cs" />
     <Compile Include="ExcelReader\ExcelReader.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="WordGenerator\WordGenerator.cs" />
