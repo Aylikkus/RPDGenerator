@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using Microsoft.Office.Interop.Excel;
-using RPDGenerator.Data;
 
-using Excel = Microsoft.Office.Interop.Excel;
+using RPDGenerator.Data;
 
 namespace RPDGenerator.ExcelReader
 {
@@ -38,8 +39,27 @@ namespace RPDGenerator.ExcelReader
                 ((Range)title.Cells[32, 2]).Value2);
             int year              = int.Parse(((Range)title.Cells[30, 21]).Value2);
 
-            // ПланСвод
-            Worksheet plan = workBook.Sheets[3];
+            // План
+            Worksheet plan = workBook.Sheets[4];
+            Range planRange = plan.UsedRange;
+            object[,] valArr = (object[,])planRange.Value[XlRangeValueDataType.xlRangeValueDefault];
+
+            List<Discipline> disciplines = new List<Discipline>(128);
+            for (int i = 1; i < valArr.GetLength(0); i++)
+            {
+                string code = valArr[i, 2]?.ToString();
+                string name = valArr[i, 3]?.ToString();
+
+                if (code is null || name is null)
+                    continue;
+
+                // Проверка на группировку дисциплин
+                if (code[0] == 'Б' && !name.ToLowerInvariant().Contains("дисциплины"))
+                {
+                    Discipline disc = new Discipline(code, name);
+                    disciplines.Add(disc);
+                }
+            }
 
             DocAttributes da = new DocAttributes();
             da.Departament = departament;
@@ -50,6 +70,12 @@ namespace RPDGenerator.ExcelReader
             da.GraduationLevel = grLevel;
             da.EducationType = edType;
             da.YearOfEntrance = year;
+            da.Disciplines = disciplines;
+
+            // Очистка
+            workBook.Close(false, pathToFile, null);
+            Marshal.ReleaseComObject(workBook);
+
             return da;
         }
     }
