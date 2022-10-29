@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace RPDGenerator.Data
 {
-    struct DocAttributes
+    public struct DocAttributes
     {
         /// <summary>
         /// Кафедра
@@ -36,7 +36,7 @@ namespace RPDGenerator.Data
         /// <summary>
         /// Форма обучения (очная, заочная)
         /// </summary>
-        public EducationType EducationType { get; set; }
+        public string EducationType { get; set; }
         /// <summary>
         /// Год набора
         /// </summary>
