@@ -30,7 +30,8 @@ namespace RPDGenerator.ExcelReader
             string departament    = ((Range)title.Cells[27, 3]).Value2;
             string faculty        = ((Range)title.Cells[28, 3]).Value2;
             string specialization = ((Range)title.Cells[19, 3]).Value2;
-            string profile        = ((Range)title.Cells[20, 3]).Value2;
+            string profile        = ProfileFactory.GetProfile(
+                ((Range)title.Cells[20, 3]).Value2);
 
             var elf = new EducationLevelFactory(((Range)title.Cells[30, 2]).Value2);
             string edLevel        = elf.EducationLevel;
