@@ -2,7 +2,7 @@
 
 namespace RPDGenerator.Data
 {
-    struct Discipline
+    public struct Discipline
     {
         public string Code { get; set; }
         public string Name { get; set; }
