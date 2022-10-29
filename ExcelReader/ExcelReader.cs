@@ -16,27 +16,41 @@ namespace RPDGenerator.ExcelReader
         /// <returns></returns>
         public static DocAttributes PullAttributes(string pathToFile)
         {
-            try
-            {
-                Application app = new Application();
-                Workbook workBook = app.Workbooks.Open(pathToFile,
-                    Type.Missing, Type.Missing, Type.Missing, Type.Missing,
-                    Type.Missing, Type.Missing, Type.Missing, Type.Missing,
-                    Type.Missing, Type.Missing, Type.Missing, Type.Missing,
-                    Type.Missing, Type.Missing);
+            Application app = new Application();
+            Workbook workBook = app.Workbooks.Open(pathToFile,
+                Type.Missing, Type.Missing, Type.Missing, Type.Missing,
+                Type.Missing, Type.Missing, Type.Missing, Type.Missing,
+                Type.Missing, Type.Missing, Type.Missing, Type.Missing,
+                Type.Missing, Type.Missing);
 
-                // Нумерация листов начинается с единицы
-                Worksheet title = workBook.Sheets[1];
-                string departament = ((Range)title.Cells[27, 3]).Value2;
+            // Нумерация листов начинается с единицы
+            // Титул
+            Worksheet title = workBook.Sheets[1];
+            string departament    = ((Range)title.Cells[27, 3]).Value2;
+            string faculty        = ((Range)title.Cells[28, 3]).Value2;
+            string specialization = ((Range)title.Cells[19, 3]).Value2;
+            string profile        = ((Range)title.Cells[20, 3]).Value2;
 
-                DocAttributes da = new DocAttributes();
-                da.Departament = departament;
-                return da;
-            }
-            catch(Exception)
-            {
-                return new DocAttributes();
-            }
+            var elf = new EducationLevelFactory(((Range)title.Cells[30, 2]).Value2);
+            string edLevel        = elf.EducationLevel;
+            string grLevel        = elf.GraduationLevel;
+            string edType         = EducationTypeFactory.GetType(
+                ((Range)title.Cells[32, 2]).Value2);
+            int year              = int.Parse(((Range)title.Cells[30, 21]).Value2);
+
+            // ПланСвод
+            Worksheet plan = workBook.Sheets[3];
+
+            DocAttributes da = new DocAttributes();
+            da.Departament = departament;
+            da.Faculty = faculty;
+            da.Specialization = specialization;
+            da.Profile = profile;
+            da.EducationLevel = edLevel;
+            da.GraduationLevel = grLevel;
+            da.EducationType = edType;
+            da.YearOfEntrance = year;
+            return da;
         }
     }
 }
