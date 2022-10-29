@@ -56,8 +56,25 @@ namespace RPDGenerator.WordGenerator
 
                     }
 
-                    
 
+
+                    //int count = da.Disciplines.Count();
+                    //for (int i = 0; i < count; i++)
+                    //{
+                    //    string disciplinecode = da.Disciplines[i].Code;
+
+
+                    //    var items = new Dictionary<string, string>()
+                    //    { "<FACULTY>",da.Faculty},
+                    //    { "<DEPARTMENT>", da.Departament},
+                    //    { "<DISCIPLINE>", da.Disciplines[i].Name},
+                    //    { "<SPECIALIZATION>",da.Specialization},
+                    //    { "<PROFILE>",da.Profile},
+                    //    { "<EDUCATIONLEVEL>",da.EducationLevel},
+                    //    { "<FORM>",da.EducationType},
+                    //    { "<YEAROF>",da.YearOfEntrance.ToString()},
+                    //    { "<>GRADUATIONLEVEL",da.GraduationLevel};                                                
+                    //}
                     Object newFileName = Path.Combine(_fileInfo.DirectoryName, "РПД_" + da.YearOfEntrance.ToString() + "_" + da.Specialization.Substring(0, 8) + "_" + da.EducationType.Substring(0) + "_+");
                     app.ActiveDocument.SaveAs2(newFileName);
                     app.ActiveDocument.Close();
@@ -81,19 +98,6 @@ namespace RPDGenerator.WordGenerator
 }
 
 
-
-//int count = da.Disciplines.Count();
-//for (int i = 0; i < count; i++)
-//{
-//    string disciplinecode = da.Disciplines[i].Code;
-
-
-//    var items = new Dictionary<string, string>()
-//                        { "<FACULTY>",da.Faculty},
-//                        { "<DEPARTMENT>",da.Departament},
-//                        { "<DISCIPLINE>", da.Disciplines[i].Name},
-//                        { "<SPECIALIZATION>",da.Specialization},
-//                        { "<PROFILE>",da.Profile}
 
 //            var helper = new WordHelper("report_pattern.docx");
 //            var items = new Dictionary<string, string>()
