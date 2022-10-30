@@ -38,7 +38,7 @@ namespace RPDGenerator.Interops
         string getPath()
         {
             StringBuilder fileName = new StringBuilder();
-            fileName.Append("РПД_" + _tags["<EDUCATIONLEVEL>"] + "_"
+            fileName.Append("РПД_" + _tags["<YEAROFENTRANCE>"] + "_"
                 + _tags["<SPECIALIZATION>"].Substring(0, 8) + "_" + _tags["<FORM>"][0]
                 + "_" + _disc.Code + ".docx");
 
