@@ -27,10 +27,7 @@ namespace RPDGenerator.Interops
             _app = new Application();
             _workBooks = _app.Workbooks;
             _workBook = _workBooks.Open(pathToFile,
-                Type.Missing, Type.Missing, Type.Missing, Type.Missing,
-                Type.Missing, Type.Missing, Type.Missing, Type.Missing,
-                Type.Missing, Type.Missing, Type.Missing, Type.Missing,
-                Type.Missing, Type.Missing);
+                Type.Missing, true);
 
             // Нумерация листов начинается с единицы
             // Титул
