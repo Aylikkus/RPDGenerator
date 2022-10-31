@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using RPDGenerator.Data;
 using RPDGenerator.Interops;
 
@@ -8,8 +9,13 @@ namespace RPDGenerator
     {
         static void Main()
         {
-            string wordpattern = "C:\\Users\\4l1kk\\source\\repos\\RPDGenerator\\Макет.docx";
-            string excel = "C:\\Users\\4l1kk\\source\\repos\\RPDGenerator\\Excel\\2018\\очная\\10.05.04_ИАСБ_АИАД_УП(plx)_5.6_2018_~.xlsx";
+            string curDir = Environment.CurrentDirectory;
+            string prjName = "RPDGenerator";
+            string projectRoot = curDir.Substring(0, curDir.IndexOf(prjName) + prjName.Length);
+
+            string wordpattern = projectRoot + "\\Макет.docx";
+            string excel = projectRoot + "\\Excel\\2022\\очная\\10.05.04_ИАСБ_аиад_С_5,6_2022_очная.p~.xlsx";
+
             DocAttributes dc;
             using (ExcelReader er = new ExcelReader())
                 dc = er.PullAttributes(excel);
