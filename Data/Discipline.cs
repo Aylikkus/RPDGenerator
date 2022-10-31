@@ -9,13 +9,20 @@ namespace RPDGenerator.Data
 
         void updateAbbrevation()
         {
-            string[] words = Name.Split(new char[] { ' ', '-' },
+            string[] words = Name.Split(new char[] { ' ', '-', },
                         StringSplitOptions.RemoveEmptyEntries);
             StringBuilder abbr = new StringBuilder();
             foreach (var w in words)
             {
                 if (w.Length > 1)
+                {
                     abbr.Append(char.ToUpper(w[0]));
+                    if (w[0] == '(')
+                        abbr.Append(char.ToUpper(w[1]));
+
+                    if (w[w.Length - 1] == ')')
+                        abbr.Append(')');
+                }
             }
             _abbr = abbr.ToString();
         }
