@@ -22,7 +22,6 @@ namespace RPDGenerator.Interops
                         { "<DEPARTMENT>",       attrs.Departament               },
                         { "<SPECIALIZATION>",   attrs.Specialization            },
                         { "<PROFILE>",          attrs.Profile                   },
-                        { "<PROFILEABBR>",      attrs.ProfileAbbrevation        },
                         { "<EDUCATIONLEVEL>",   attrs.EducationLevel            },
                         { "<FORM>",             attrs.EducationType             },
                         { "<YEAROF>",           attrs.YearOfEntrance.ToString() },

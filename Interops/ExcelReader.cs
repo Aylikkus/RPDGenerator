@@ -53,23 +53,25 @@ namespace RPDGenerator.Interops
             List<Discipline> disciplines = new List<Discipline>(128);
             for (int i = 1; i < valArr.GetLength(0); i++)
             {
-                string discCode = valArr[i, 2]?.ToString();
-                string discName = valArr[i, 3]?.ToString();
+                string code = valArr[i, 2]?.ToString();
+                string name = valArr[i, 3]?.ToString();
 
-                if (discCode is null || discName is null)
+                if (code is null || name is null)
                     continue;
 
                 // Проверка на группировку дисциплин
-                if (discCode[0] == 'Б' && !discName.ToLowerInvariant().Contains("дисциплины"))
+                if (code[0] == 'Б' && !name.ToLowerInvariant().Contains("дисциплины"))
                 {
-                    Discipline disc = new Discipline(discCode, discName);
+                    Discipline disc = new Discipline(code, name);
                     disciplines.Add(disc);
                 }
             }
 
-            DocAttributes da = new DocAttributes(specialization, profile);
+            DocAttributes da = new DocAttributes();
             da.Departament = departament;
             da.Faculty = faculty;
+            da.Specialization = specialization;
+            da.Profile = profile;
             da.EducationLevel = edLevel;
             da.GraduationLevel = grLevel;
             da.EducationType = edType;

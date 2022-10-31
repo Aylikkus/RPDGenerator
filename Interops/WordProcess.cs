@@ -37,11 +37,12 @@ namespace RPDGenerator.Interops
 
         string getPath()
         {
-            string fileName = string.Join("_", "РПД", _tags["<YEAROFENTRANCE>"], 
-                _tags["<SPECIALIZATION>"].Substring(0, 8), _tags["<PROFILEABBR>"].ToLowerInvariant(),
-                _tags["<FORM>"][0], _disc.Code, _disc.Abbrevation);
+            StringBuilder fileName = new StringBuilder();
+            fileName.Append("РПД_" + _tags["<YEAROFENTRANCE>"] + "_"
+                + _tags["<SPECIALIZATION>"].Substring(0, 8) + "_" + _tags["<FORM>"][0]
+                + "_" + _disc.Code + ".docx");
 
-            return Path.Combine(_template.DirectoryName, fileName + ".docx");
+            return Path.Combine(_template.DirectoryName, fileName.ToString());
         }
 
         public WordProcess(Dictionary<string, string> tags, Discipline disc, FileInfo template)
