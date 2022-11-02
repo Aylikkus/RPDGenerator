@@ -9,7 +9,7 @@ namespace RPDGenerator.Data
         /// Отображает размер флаговой переменной
         /// в битах
         /// </summary>
-        const int size = sizeof(ushort) * 8;
+        const int _size = sizeof(ushort) * 8;
 
         /// <summary>
         /// Представляет собой семестры, 
@@ -25,7 +25,7 @@ namespace RPDGenerator.Data
 
         public void AddSemester(int number)
         {
-            if (number < 1 && number > size)
+            if (number < 1 && number > _size)
                 return;
 
             enableFlag(number);
@@ -33,7 +33,7 @@ namespace RPDGenerator.Data
 
         public void AddCourse(int number)
         {
-            if (number < 1 && number > size / 2)
+            if (number < 1 && number > _size / 2)
                 return;
 
             enableFlag(number * 2);
@@ -44,9 +44,9 @@ namespace RPDGenerator.Data
         {
             get
             {
-                List<int> flagNums = new List<int>(size);
+                List<int> flagNums = new List<int>(_size);
 
-                for (int i = size - 1; i >= 0; i--)
+                for (int i = _size - 1; i >= 0; i--)
                 {
                     int bit = (_semesterFlag >> i) & 1;
                     if (bit == 1)
@@ -61,9 +61,9 @@ namespace RPDGenerator.Data
         {
             get
             {
-                List<int> flagNums = new List<int>(size);
+                List<int> flagNums = new List<int>(_size);
 
-                for (int i = size - 1; i >= 0; i -= 2)
+                for (int i = _size - 1; i >= 0; i -= 2)
                 {
                     int bitOdd = (_semesterFlag >> i) & 1;
                     int bitEven = (_semesterFlag >> i - 1) & 1;
