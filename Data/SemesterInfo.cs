@@ -6,6 +6,12 @@ namespace RPDGenerator.Data
     public struct SemesterInfo
     {
         /// <summary>
+        /// Отображает размер флаговой переменной
+        /// в битах
+        /// </summary>
+        const int size = sizeof(ushort) * 8;
+
+        /// <summary>
         /// Представляет собой семестры, 
         /// на которых идёт дисциплина
         /// Например: 0b1001 -> на первом и четвёртом
@@ -19,9 +25,7 @@ namespace RPDGenerator.Data
 
         public void AddSemester(int number)
         {
-            int size = sizeof(ushort);
-
-            if (number < 1 && number > size * 8)
+            if (number < 1 && number > size)
                 return;
 
             enableFlag(number);
@@ -29,9 +33,7 @@ namespace RPDGenerator.Data
 
         public void AddCourse(int number)
         {
-            int size = sizeof(ushort) * 8 / 2;
-
-            if (number < 1 && number > size)
+            if (number < 1 && number > size / 2)
                 return;
 
             enableFlag(number * 2);
@@ -42,7 +44,6 @@ namespace RPDGenerator.Data
         {
             get
             {
-                int size = sizeof(ushort) * 8;
                 List<int> flagNums = new List<int>(size);
 
                 for (int i = size - 1; i >= 0; i--)
@@ -60,7 +61,6 @@ namespace RPDGenerator.Data
         {
             get
             {
-                int size = sizeof(ushort) * 8;
                 List<int> flagNums = new List<int>(size);
 
                 for (int i = size - 1; i >= 0; i -= 2)
