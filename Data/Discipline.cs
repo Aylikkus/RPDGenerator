@@ -5,7 +5,7 @@ using System.Text;
 
 namespace RPDGenerator.Data
 {
-    public struct Discipline
+    public class Discipline
     {
         string _abbr;
 
@@ -46,14 +46,61 @@ namespace RPDGenerator.Data
 
         /// <summary>
         /// Представляет собой информацию,
-        /// связанную с семестрами (на каких
-        /// семестрах данная дисциплина, лекции,
-        /// и соответствующие часы на каждый семестр,
-        /// зачёты, экзамены и т.д.)
+        /// связанную с семестрами
         /// </summary>
         public SemesterInfo Semester;
 
-        public Discipline(string code, string name) : this()
+        /// <summary>
+        /// Лекции
+        /// </summary>
+        public WorkInfo Lectures { get; set; }
+
+        /// <summary>
+        /// Лабораторные
+        /// </summary>
+        public WorkInfo Laboratory { get; set; }
+
+        /// <summary>
+        /// Практики
+        /// </summary>
+        public WorkInfo Practice { get; set; }
+
+        /// <summary>
+        /// Самостоятельные работы
+        /// </summary>
+        public WorkInfo Independent { get; set; }
+
+        /// <summary>
+        /// Экзамены
+        /// </summary>
+        public WorkInfo Exam { get; set; }
+
+        /// <summary>
+        /// Зачёты
+        /// </summary>
+        public WorkInfo Credits { get; set; }
+
+        /// <summary>
+        /// Зачёты с оценкой
+        /// </summary>
+        public WorkInfo RatedCredits { get; set; }
+
+        /// <summary>
+        /// Курсовые работы
+        /// </summary>
+        public WorkInfo CourseWorks { get; set; }
+
+        /// <summary>
+        /// Курсовые проекты
+        /// </summary>
+        public WorkInfo CourseProjects { get; set; }
+
+        /// <summary>
+        /// Расчётно-графические работы
+        /// </summary>
+        public WorkInfo RGR { get; set; }
+
+        public Discipline(string code, string name)
         {
             Code = code;
             Name = name;

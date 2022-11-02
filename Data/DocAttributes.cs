@@ -47,22 +47,27 @@ namespace RPDGenerator.Data
         /// Кафедра
         /// </summary>
         public string Departament { get; set; }
+
         /// <summary>
         /// Факультет
         /// </summary>
         public string Faculty { get; set; }
+
         /// <summary>
         /// Дисциплины
         /// </summary>
         public List<Discipline> Disciplines { get; set; }
+
         /// <summary>
         /// Специализация
         /// </summary>
         public string Specialization { get; }
+
         /// <summary>
         /// Направленность
         /// </summary>
         public string Profile { get; }
+
         /// <summary>
         /// Аббревиатура направленности, например САПР или АИД
         /// </summary>
@@ -76,18 +81,22 @@ namespace RPDGenerator.Data
                 return _abbr;
             }
         }
+
         /// <summary>
         /// Уровень образования
         /// </summary>
         public string EducationLevel { get; set; }
+
         /// <summary>
         /// Квалификация, присваиваемая по специальности
         /// </summary>
         public string GraduationLevel { get; set; }
+
         /// <summary>
         /// Форма обучения (очная, заочная)
         /// </summary>
         public string EducationType { get; set; }
+
         /// <summary>
         /// Год набора
         /// </summary>

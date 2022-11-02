@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace RPDGenerator.Data
 {
-    public struct SemesterInfo
+    public class SemesterInfo
     {
         /// <summary>
         /// Отображает размер флаговой переменной
@@ -38,6 +38,14 @@ namespace RPDGenerator.Data
 
             enableFlag(number * 2);
             enableFlag(number * 2 - 1);
+        }
+
+        public int Size
+        {
+            get
+            {
+                return _size;
+            }
         }
 
         public int[] Semesters
