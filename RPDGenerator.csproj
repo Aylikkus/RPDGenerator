@@ -83,6 +83,7 @@
     <Compile Include="Data\Discipline.cs" />
     <Compile Include="Data\DocAttributes.cs" />
     <Compile Include="Data\Formatter.cs" />
+    <Compile Include="Data\SemesterInfo.cs" />
     <Compile Include="Interops\ExcelReader.cs" />
     <Compile Include="Interops\WordProcess.cs" />
     <Compile Include="Program.cs" />
