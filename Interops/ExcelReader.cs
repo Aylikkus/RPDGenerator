@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using System.Globalization;
 using Microsoft.Office.Interop.Excel;
 
 using RPDGenerator.Data;
@@ -62,7 +63,34 @@ namespace RPDGenerator.Interops
                 // Проверка на группировку дисциплин
                 if (discCode[0] == 'Б' && !discName.ToLowerInvariant().Contains("дисциплины"))
                 {
+                    SemesterInfo si = new SemesterInfo();
+
+                    // Экз, Зач, ЗачОц, КурПр, КурРаб, РГР
+                    WorkInfo[] infos = new WorkInfo[6];
+
+                    for (int j = 4; j < 10; j++)
+                    {
+                        string workInfoSems = (string)valArr[i, j];
+                        if (workInfoSems == null) workInfoSems = "";
+
+                        if (workInfoSems.Length > 0)
+                            infos[j - 4] = new WorkInfo(si);
+
+                        foreach (char c in workInfoSems)
+                        {
+                            int n = int.Parse(c.ToString(), NumberStyles.HexNumber);
+                            infos[j - 4].SetOn(n, 0);
+                        }
+                    }
+
                     Discipline disc = new Discipline(discCode, discName);
+                    disc.Semester = si;
+                    disc.Exam = infos[0];
+                    disc.Credits = infos[1];
+                    disc.RatedCredits = infos[2];
+                    disc.CourseProjects = infos[3];
+                    disc.CourseWorks = infos[4];
+                    disc.RGR = infos[5];
                     disciplines.Add(disc);
                 }
             }
