@@ -17,7 +17,7 @@ namespace RPDGenerator.Interops
         Worksheet _plan;
         Range _planRange;
 
-        void ParseLessonCell(string cellCnt, int sem, ref WorkInfo les, in SemesterInfo si)
+        void parseLessonCell(string cellCnt, int sem, ref WorkInfo les, in SemesterInfo si)
         {
             bool parsed = int.TryParse(cellCnt, out int hours);
 
@@ -101,10 +101,10 @@ namespace RPDGenerator.Interops
 
                     for (int j = 18, s = 1; (string)valArr[3, j] == "з.е." && s <= 16; j += 7, s++)
                     {
-                        ParseLessonCell((string)valArr[i, j + 2], s, ref lesInfos[0], si);
-                        ParseLessonCell((string)valArr[i, j + 3], s, ref lesInfos[1], si);
-                        ParseLessonCell((string)valArr[i, j + 4], s, ref lesInfos[2], si);
-                        ParseLessonCell((string)valArr[i, j + 5], s, ref lesInfos[3], si);
+                        parseLessonCell((string)valArr[i, j + 2], s, ref lesInfos[0], si);
+                        parseLessonCell((string)valArr[i, j + 3], s, ref lesInfos[1], si);
+                        parseLessonCell((string)valArr[i, j + 4], s, ref lesInfos[2], si);
+                        parseLessonCell((string)valArr[i, j + 5], s, ref lesInfos[3], si);
                     }
 
                     Discipline disc = new Discipline(discCode, discName);
