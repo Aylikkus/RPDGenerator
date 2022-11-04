@@ -17,6 +17,19 @@ namespace RPDGenerator.Interops
         Worksheet _plan;
         Range _planRange;
 
+        void ParseLessonCell(string cellCnt, int sem, ref WorkInfo les, in SemesterInfo si)
+        {
+            bool parsed = int.TryParse(cellCnt, out int hours);
+
+            if (parsed)
+            {
+                if (les == null)
+                    les = new WorkInfo(si);
+
+                les.SetOn(sem, hours);
+            }
+        }
+
         /// <summary>
         /// Вытягивает информацию о проф. дисциплине из эксель файла,
         /// по определённому шаблону
@@ -66,7 +79,7 @@ namespace RPDGenerator.Interops
                     SemesterInfo si = new SemesterInfo();
 
                     // Экз, Зач, ЗачОц, КурПр, КурРаб, РГР
-                    WorkInfo[] infos = new WorkInfo[6];
+                    WorkInfo[] examInfos = new WorkInfo[6];
 
                     for (int j = 4; j < 10; j++)
                     {
@@ -74,23 +87,38 @@ namespace RPDGenerator.Interops
                         if (workInfoSems == null) workInfoSems = "";
 
                         if (workInfoSems.Length > 0)
-                            infos[j - 4] = new WorkInfo(si);
+                            examInfos[j - 4] = new WorkInfo(si);
 
                         foreach (char c in workInfoSems)
                         {
                             int n = int.Parse(c.ToString(), NumberStyles.HexNumber);
-                            infos[j - 4].SetOn(n, 0);
+                            examInfos[j - 4].SetOn(n, 0);
                         }
+                    }
+
+                    // Лекции, Лабы, Практики, Сам.Работы
+                    WorkInfo[] lesInfos = new WorkInfo[4];
+
+                    for (int j = 18, s = 1; (string)valArr[3, j] == "з.е." && s <= 16; j += 7, s++)
+                    {
+                        ParseLessonCell((string)valArr[i, j + 2], s, ref lesInfos[0], si);
+                        ParseLessonCell((string)valArr[i, j + 3], s, ref lesInfos[1], si);
+                        ParseLessonCell((string)valArr[i, j + 4], s, ref lesInfos[2], si);
+                        ParseLessonCell((string)valArr[i, j + 5], s, ref lesInfos[3], si);
                     }
 
                     Discipline disc = new Discipline(discCode, discName);
                     disc.Semester = si;
-                    disc.Exam = infos[0];
-                    disc.Credits = infos[1];
-                    disc.RatedCredits = infos[2];
-                    disc.CourseProjects = infos[3];
-                    disc.CourseWorks = infos[4];
-                    disc.RGR = infos[5];
+                    disc.Exam = examInfos[0];
+                    disc.Credits = examInfos[1];
+                    disc.RatedCredits = examInfos[2];
+                    disc.CourseProjects = examInfos[3];
+                    disc.CourseWorks = examInfos[4];
+                    disc.RGR = examInfos[5];
+                    disc.Lectures = lesInfos[0];
+                    disc.Laboratory = lesInfos[1];
+                    disc.Practice = lesInfos[2];
+                    disc.Independent = lesInfos[3];
                     disciplines.Add(disc);
                 }
             }

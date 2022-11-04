@@ -1,6 +1,4 @@
-﻿using Microsoft.Office.Interop.Word;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Text;
 
 namespace RPDGenerator.Data
@@ -48,7 +46,7 @@ namespace RPDGenerator.Data
         /// Представляет собой информацию,
         /// связанную с семестрами
         /// </summary>
-        public SemesterInfo Semester;
+        public SemesterInfo Semester { get; set; }
 
         /// <summary>
         /// Лекции
