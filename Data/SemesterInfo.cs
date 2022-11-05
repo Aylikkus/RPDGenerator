@@ -61,6 +61,7 @@ namespace RPDGenerator.Data
                         flagNums.Add(i + 1);
                 }
 
+                flagNums.Reverse();
                 return flagNums.ToArray();
             }
         }
@@ -79,6 +80,7 @@ namespace RPDGenerator.Data
                         flagNums.Add((i / 2) + (i % 2));
                 }
 
+                flagNums.Reverse();
                 return flagNums.ToArray();
             }
         }
