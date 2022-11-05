@@ -67,6 +67,10 @@ namespace RPDGenerator.Data
         /// Самостоятельные работы
         /// </summary>
         public WorkInfo Independent { get; set; }
+        /// <summary>
+        /// Контрольные работы
+        /// </summary>
+        public WorkInfo Control { get; set; }
 
         /// <summary>
         /// Экзамены
