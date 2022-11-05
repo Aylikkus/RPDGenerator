@@ -2,26 +2,26 @@
 using Microsoft.Office.Interop.Word;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using RPDGenerator.Data;
 
 namespace RPDGenerator.Interops
 {
     class WordProcess
     {
-        Dictionary<string, string> _tags;
+        Dictionary<string, string> _tagsComm;
+        Dictionary<string, string> _tagsDisc;
         Discipline _disc;
         FileInfo _template;
 
         Selection _selection;
         Find _find;
 
-        void findExecute(string text, string repl)
+        bool findExecute(string text, string repl)
         {
             _find.Text = text;
             _find.Replacement.Text = repl;
 
-            _find.Execute(
+            return _find.Execute(
                 FindText: Type.Missing,
                 MatchCase: false,
                 MatchWholeWord: false,
@@ -37,16 +37,18 @@ namespace RPDGenerator.Interops
 
         string getPath()
         {
-            string fileName = string.Join("_", "РПД", _tags["<YEAROFENTRANCE>"], 
-                _tags["<SPECIALIZATION>"].Substring(0, 8), _tags["<PROFILEABBR>"].ToLowerInvariant(),
-                _tags["<FORM>"][0], _disc.Code, _disc.Abbrevation);
+            string fileName = string.Join("_", "РПД", _tagsComm["<YEAROFENTRANCE>"], 
+                _tagsComm["<SPECIALIZATION>"].Substring(0, 8), _tagsComm["<PROFILEABBR>"].ToLowerInvariant(),
+                _tagsComm["<FORM>"][0], _disc.Code, _disc.Abbrevation);
 
             return Path.Combine(_template.DirectoryName, fileName + ".docx");
         }
 
-        public WordProcess(Dictionary<string, string> tags, Discipline disc, FileInfo template)
+        public WordProcess(Dictionary<string, string> tagsComm, Dictionary<string, string> tagsDisc, 
+            Discipline disc, FileInfo template)
         {
-            _tags = tags;
+            _tagsComm = tagsComm;
+            _tagsDisc = tagsDisc;
             _disc = disc;
             _template = template;
         }
@@ -56,22 +58,25 @@ namespace RPDGenerator.Interops
             _selection = app.Selection;
             _find = _selection.Find;
 
-            foreach (var tag in _tags)
+            foreach (var tag in _tagsComm)
                 findExecute(tag.Key, tag.Value);
 
-            app.ActiveDocument.SaveAs2(getPath());
-            app.ActiveDocument.Undo();
+            ProcessDiscipline(app);
         }
 
         public void ProcessDiscipline(Application app)
         {
+            int countUndo = 0;
             _selection = app.Selection;
             _find = _selection.Find;
 
-            findExecute("<DISCIPLINE>", _tags["<DISCIPLINE>"]);
+            foreach(var tag in _tagsDisc)
+            {
+                countUndo += findExecute(tag.Key, tag.Value) ? 1 : 0;
+            }
 
             app.ActiveDocument.SaveAs2(getPath());
-            app.ActiveDocument.Undo();
+            app.ActiveDocument.Undo(countUndo);
         }
     }
 }
