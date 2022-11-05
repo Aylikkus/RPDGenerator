@@ -16,32 +16,34 @@ namespace RPDGenerator.Interops
         Application _app;
         Documents _documents;
 
-        string formatSemArray(int[]a)
+        string formatSemArray(int[] arr)
         {
-            StringBuilder sb = new StringBuilder(); 
-            if (a.Length > 1)
+            StringBuilder semBld = new StringBuilder(); 
+            if (arr.Length > 1)
             {
-                for (int i = 0; i < a.Length; i++)
+                for (int i = 0; i < arr.Length; i++)
                 {
-                    sb.Append(a[i] + ((i == a.Length) ? "" : ", "));
+                    semBld.Append(arr[i] + ((i == arr.Length) ? "" : ", "));
                 }
             }
             else
             {
-                sb.Append(a[0]);
+                semBld.Append(arr[0]);
             }
 
-            return sb.ToString();
+            return semBld.ToString();
         }
 
         string formatAttestation(WorkInfo exam, WorkInfo credits, WorkInfo ratedCredits)
         {
-            StringBuilder sb = new StringBuilder();
-            if (credits != null) sb.AppendLine("зачёт ");
-            if (ratedCredits != null) sb.AppendLine("зачёт с оценкой ");
-            if (exam != null) sb.AppendLine("экзамен ");
-            string str = sb.ToString().Replace('\n', ',');
-            return char.ToUpper(str[0]) + str.Substring(1);
+            StringBuilder attBld = new StringBuilder();
+
+            if (credits != null) attBld.AppendLine("зачёт ");
+            if (ratedCredits != null) attBld.AppendLine("зачёт с оценкой ");
+            if (exam != null) attBld.AppendLine("экзамен ");
+
+            string att = attBld.ToString().Replace('\n', ',');
+            return char.ToUpper(att[0]) + att.Substring(1);
         }
 
         public void GenerateDocs(DocAttributes attrs, string pathToTemplate)
