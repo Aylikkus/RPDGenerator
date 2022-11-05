@@ -6,6 +6,8 @@ using System.Linq;
 using System.Runtime.InteropServices;
 
 using RPDGenerator.Data;
+using System.CodeDom;
+using System.Text;
 
 namespace RPDGenerator.Interops
 {
@@ -13,6 +15,33 @@ namespace RPDGenerator.Interops
     {
         Application _app;
         Documents _documents;
+
+        string formatSemArray(int[]a)
+        {
+            StringBuilder sb = new StringBuilder(); 
+            if (a.Length > 1)
+            {
+                for (int i = 0; i < a.Length; i++)
+                {
+                    sb.Append(a[i] + ((i == a.Length) ? "" : ", "));
+                }
+            }
+            else
+            {
+                sb.Append(a[0]);
+            }
+
+            return sb.ToString();
+        }
+
+        public void formatAttestation()
+        {
+            StringBuilder sb = new StringBuilder();
+            if ()
+            {
+
+            }
+        }
 
         public void GenerateDocs(DocAttributes attrs, string pathToTemplate)
         {
@@ -40,7 +69,17 @@ namespace RPDGenerator.Interops
             int count = attrs.Disciplines.Count();
             for (int i = 0; i < count; i++)
             {
+                int totalh = attrs.Disciplines[i].Lectures.Total + attrs.Disciplines[i].Practice.Total +
+                    attrs.Disciplines[i].Laboratory.Total + attrs.Disciplines[i].Independent.Total;
                 tags["<DISCIPLINE>"] = attrs.Disciplines[i].Name;
+                tags["<TOTALH>"] =  totalh.ToString();
+                tags["<LECTRURESH>"] = attrs.Disciplines[i].Lectures.Total.ToString();
+                tags["<PRACTICEH>"] = attrs.Disciplines[i].Practice.Total.ToString();
+                tags["<LABORATORYH>"] = attrs.Disciplines[i].Laboratory.Total.ToString();
+                tags["<INDEPENDENTH>"] = attrs.Disciplines[i].Independent.Total.ToString();
+                tags["<COURSES>"] = formatSemArray(attrs.Disciplines[i].Semester.Courses);
+                tags["<SEMESTERS>"] = formatSemArray(attrs.Disciplines[i].Semester.Semesters);
+                tags["<TOTALCU>"] = (totalh / 36).ToString();
                 WordProcess wp = new WordProcess(
                     tags, attrs.Disciplines[i], templ);
 
@@ -69,5 +108,6 @@ namespace RPDGenerator.Interops
             GC.Collect();
             GC.WaitForPendingFinalizers();
         }
+        
     }
 }
