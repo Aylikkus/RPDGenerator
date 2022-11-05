@@ -34,13 +34,14 @@ namespace RPDGenerator.Interops
             return sb.ToString();
         }
 
-        public void formatAttestation()
+        string formatAttestation(WorkInfo exam, WorkInfo credits, WorkInfo ratedCredits)
         {
             StringBuilder sb = new StringBuilder();
-            if ()
-            {
-
-            }
+            if (credits != null) sb.AppendLine("зачёт ");
+            if (ratedCredits != null) sb.AppendLine("зачёт с оценкой ");
+            if (exam != null) sb.AppendLine("экзамен ");
+            string str = sb.ToString().Replace('\n', ',');
+            return char.ToUpper(str[0]) + str.Substring(1);
         }
 
         public void GenerateDocs(DocAttributes attrs, string pathToTemplate)
@@ -80,6 +81,8 @@ namespace RPDGenerator.Interops
                 tags["<COURSES>"] = formatSemArray(attrs.Disciplines[i].Semester.Courses);
                 tags["<SEMESTERS>"] = formatSemArray(attrs.Disciplines[i].Semester.Semesters);
                 tags["<TOTALCU>"] = (totalh / 36).ToString();
+                tags["ACCREDITATION"] = formatAttestation(attrs.Disciplines[i].Exam, attrs.Disciplines[i].Credits,
+                    attrs.Disciplines[i].RatedCredits);
                 WordProcess wp = new WordProcess(
                     tags, attrs.Disciplines[i], templ);
 
