@@ -24,6 +24,11 @@ namespace RPDGenerator.Data
             _semesterInfo.AddSemester(semester);
         }
 
+        public int HoursOnSemester(int sem)
+        {
+            return _workHours[sem];
+        }
+
         public IEnumerable<KeyValuePair<int, int>> HourEnumerator
         {
             get
