@@ -32,6 +32,20 @@ namespace RPDGenerator.Data
             }
         }
 
+        public int Total 
+        {
+            get
+            {
+                int count = 0;
+                foreach (var v in _workHours.Values)
+                {
+                    count += v;
+                }
+
+                return count;
+            }
+        }
+
         public WorkInfo(SemesterInfo semInfo)
         {
             _semesterInfo = semInfo;
