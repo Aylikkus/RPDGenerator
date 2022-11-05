@@ -3,6 +3,7 @@ using Microsoft.Office.Interop.Word;
 using System.Collections.Generic;
 using System.IO;
 using RPDGenerator.Data;
+using System.Linq;
 
 namespace RPDGenerator.Interops
 {
@@ -44,6 +45,58 @@ namespace RPDGenerator.Interops
             return Path.Combine(_template.DirectoryName, fileName + ".docx");
         }
 
+        void formatTrudTable(Application app, ref int counter)
+        {
+            Table trudTable = app.ActiveDocument.Bookmarks["Трудоёмкость"].Range.Tables[1];
+            Cell semCell = trudTable.Cell(3, 3);
+
+            int semCount = _disc.Semester.Semesters.Count();
+            for (int i = 3; i <= trudTable.Rows.Count; i++)
+            {
+                trudTable.Cell(i, 3).Split(1, semCount);
+                counter++;
+            }
+
+            // Колонки с семестрами
+            for (int j = 3; j <= trudTable.Columns.Count; j++)
+            {
+                int currSem = _disc.Semester.Semesters[j - 3];
+
+                trudTable.Cell(3, j).Range.Text = currSem.ToString();
+                counter++;
+
+                // Лекции
+                if (_disc.Lectures != null)
+                {
+                    trudTable.Cell(5, j).Range.Text = _disc.Lectures.HoursOnSemester(currSem).ToString();
+                    counter++;
+                }
+                
+                // Лабы
+                if (_disc.Laboratory != null)
+                {
+                    trudTable.Cell(6, j).Range.Text = _disc.Laboratory.HoursOnSemester(currSem).ToString();
+                    trudTable.Cell(7, j).Range.Text = _disc.Laboratory.HoursOnSemester(currSem).ToString();
+                    counter += 2;
+                }
+
+                // Практики
+                if (_disc.Practice != null)
+                {
+                    trudTable.Cell(8, j).Range.Text = _disc.Practice.HoursOnSemester(currSem).ToString();
+                    trudTable.Cell(9, j).Range.Text = _disc.Practice.HoursOnSemester(currSem).ToString();
+                    counter += 2;
+                }
+
+                // Сам. Работы
+                if (_disc.Independent != null)
+                {
+                    trudTable.Cell(10, j).Range.Text = _disc.Independent.HoursOnSemester(currSem).ToString();
+                    counter++;
+                }
+            }
+        }
+
         public WordProcess(Dictionary<string, string> tagsComm, Dictionary<string, string> tagsDisc, 
             Discipline disc, FileInfo template)
         {
@@ -74,6 +127,8 @@ namespace RPDGenerator.Interops
             {
                 countUndo += findExecute(tag.Key, tag.Value) ? 1 : 0;
             }
+
+            formatTrudTable(app, ref countUndo);
 
             app.ActiveDocument.SaveAs2(getPath());
             app.ActiveDocument.Undo(countUndo);
