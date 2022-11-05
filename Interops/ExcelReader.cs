@@ -96,8 +96,8 @@ namespace RPDGenerator.Interops
                         }
                     }
 
-                    // Лекции, Лабы, Практики, Сам.Работы
-                    WorkInfo[] lesInfos = new WorkInfo[4];
+                    // Лекции, Лабы, Практики, Сам.Работы, Контроль
+                    WorkInfo[] lesInfos = new WorkInfo[5];
 
                     for (int j = 18, s = 1; (string)valArr[3, j] == "з.е." && s <= 16; j += 7, s++)
                     {
@@ -105,6 +105,7 @@ namespace RPDGenerator.Interops
                         parseLessonCell((string)valArr[i, j + 3], s, ref lesInfos[1], si);
                         parseLessonCell((string)valArr[i, j + 4], s, ref lesInfos[2], si);
                         parseLessonCell((string)valArr[i, j + 5], s, ref lesInfos[3], si);
+                        parseLessonCell((string)valArr[i, j + 6], s, ref lesInfos[4], si);
                     }
 
                     Discipline disc = new Discipline(discCode, discName);
@@ -119,6 +120,7 @@ namespace RPDGenerator.Interops
                     disc.Laboratory = lesInfos[1];
                     disc.Practice = lesInfos[2];
                     disc.Independent = lesInfos[3];
+                    disc.Control = lesInfos[4];
                     disciplines.Add(disc);
                 }
             }
