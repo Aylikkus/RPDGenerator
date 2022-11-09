@@ -6,7 +6,6 @@ using System.Linq;
 using System.Runtime.InteropServices;
 
 using RPDGenerator.Data;
-using System.CodeDom;
 using System.Text;
 
 namespace RPDGenerator.Interops
