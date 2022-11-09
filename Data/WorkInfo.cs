@@ -26,7 +26,16 @@ namespace RPDGenerator.Data
 
         public int HoursOnSemester(int sem)
         {
-            return _workHours[sem];
+            int hours;
+            try
+            {
+                hours = _workHours[sem];
+            }
+            catch (KeyNotFoundException)
+            {
+                hours = 0;
+            }
+            return hours;
         }
 
         public IEnumerable<KeyValuePair<int, int>> HourEnumerator

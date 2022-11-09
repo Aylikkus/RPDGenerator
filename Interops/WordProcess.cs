@@ -79,7 +79,15 @@ namespace RPDGenerator.Interops
 
         void pasteInCellWorkInfo(int row, int column, int sem, Table tb, WorkInfo wi)
         {
-            tb.Cell(row, column).Range.Text = wi == null ? "-" : wi.HoursOnSemester(sem).ToString();
+            int hours;
+            if (wi == null || (hours = wi.HoursOnSemester(sem)) == 0)
+            {
+                tb.Cell(row, column).Range.Text = "-";
+            }
+            else
+            {
+                tb.Cell(row, column).Range.Text = hours.ToString();
+            }
         }
 
         void formatTrudTable()
