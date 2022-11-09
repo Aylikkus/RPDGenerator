@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.Office.Interop.Word;
+using System;
+using System.Collections.Generic;
 using System.Text;
 
 namespace RPDGenerator.Data
@@ -41,6 +43,8 @@ namespace RPDGenerator.Data
                 return _abbr;
             }
         }
+
+        public Dictionary<string, string> Competentions { get; set; }
 
         /// <summary>
         /// Представляет собой информацию,

@@ -102,6 +102,8 @@ namespace RPDGenerator.Data
         /// </summary>
         public int YearOfEntrance { get; set; }
 
+        public Dictionary<string, string> Competentions { get; set; }
+
         public DocAttributes(string specialization, string profile) : this()
         {
             _abbr = null;
