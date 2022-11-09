@@ -15,6 +15,7 @@ namespace RPDGenerator.Interops
     {
         Application _app;
         Documents _documents;
+        Document _template;
 
         string formatSemArray(int[] arr)
         {
@@ -88,17 +89,17 @@ namespace RPDGenerator.Interops
             _app.DisplayAlerts = WdAlertLevel.wdAlertsNone;
 
             _documents = _app.Documents;
-            _documents.Open(templ.FullName, Type.Missing, true);
 
-            bool processed = false;
             int count = attrs.Disciplines.Count();
             for (int i = 0; i < count; i++)
             {
+                _template = _documents.Open(templ.FullName);
+
                 int totalh = getTotalDisc(attrs.Disciplines[i]);
-                string totalle = attrs.Disciplines[i].Lectures == null ? "" : attrs.Disciplines[i].Lectures.Total.ToString();
-                string totalpr = attrs.Disciplines[i].Practice == null ? "" : attrs.Disciplines[i].Practice.Total.ToString();
-                string totalla = attrs.Disciplines[i].Laboratory == null ? "" : attrs.Disciplines[i].Laboratory.Total.ToString();
-                string totalin = attrs.Disciplines[i].Independent == null ? "" : attrs.Disciplines[i].Independent.Total.ToString();
+                string totalle = attrs.Disciplines[i].Lectures == null ? "-" : attrs.Disciplines[i].Lectures.Total.ToString();
+                string totalpr = attrs.Disciplines[i].Practice == null ? "-" : attrs.Disciplines[i].Practice.Total.ToString();
+                string totalla = attrs.Disciplines[i].Laboratory == null ? "-" : attrs.Disciplines[i].Laboratory.Total.ToString();
+                string totalin = attrs.Disciplines[i].Independent == null ? "-" : attrs.Disciplines[i].Independent.Total.ToString();
 
                 Dictionary<string, string> tagsDiscipline = new Dictionary<string, string>() {
                     { "<DISCIPLINE>", attrs.Disciplines[i].Name },
@@ -115,29 +116,20 @@ namespace RPDGenerator.Interops
                 };
 
                 
-                WordProcess wp = new WordProcess(tagsCommon, tagsDiscipline, attrs.Disciplines[i], templ);
+                WordProcess wp = new WordProcess(tagsCommon, tagsDiscipline, 
+                    attrs.Disciplines[i], templ.FullName, _template);
 
-                // Сначала форматируем основные теги,
-                // а потом изменяем только теги дисцплины
-                if (!processed)
-                {
-                    wp.Process(_app);
-                    processed = true;
-                }
-                else
-                {
-                    wp.ProcessDiscipline(_app);
-                }
+                wp.Process(_app);
             };
         }
 
         public void Dispose()
         {
-            _app.ActiveDocument.Close();
             _app.Quit();
 
             while (Marshal.ReleaseComObject(_app) > 0) { };
             while (Marshal.ReleaseComObject(_documents) > 0) { };
+            while (Marshal.ReleaseComObject(_template) > 0) { };
 
             GC.Collect();
             GC.WaitForPendingFinalizers();

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using RPDGenerator.Data;
 using System.Linq;
+using System.Text;
 
 namespace RPDGenerator.Interops
 {
@@ -12,8 +13,10 @@ namespace RPDGenerator.Interops
         Dictionary<string, string> _tagsComm;
         Dictionary<string, string> _tagsDisc;
         Discipline _disc;
-        FileInfo _template;
 
+        string _tempPath;
+
+        Document _template;
         Selection _selection;
         Find _find;
 
@@ -36,25 +39,57 @@ namespace RPDGenerator.Interops
                 Replace: WdReplace.wdReplaceAll);
         }
 
+        void replaceCompetentions()
+        {
+            Range compsRange = _template.Bookmarks["ВсеКомпетенции"].Range;
+
+            StringBuilder comps = new StringBuilder();
+            foreach (var kv in _disc.Competentions)
+            {
+                comps.Append($"{kv.Key} – {kv.Value}\n");
+            }
+
+            compsRange.Text = comps.ToString();
+        }
+
         string getPath()
         {
             string fileName = string.Join("_", "РПД", _tagsComm["<YEAROFENTRANCE>"], 
                 _tagsComm["<SPECIALIZATION>"].Substring(0, 8), _tagsComm["<PROFILEABBR>"].ToLowerInvariant(),
                 _tagsComm["<FORM>"][0], _disc.Code, _disc.Abbrevation);
 
-            return Path.Combine(_template.DirectoryName, fileName + ".docx");
+            return Path.Combine(_template.Path, fileName + ".docx");
         }
 
-        void formatTrudTable(Application app, ref int counter)
+        void formatCompTable()
         {
-            Table trudTable = app.ActiveDocument.Bookmarks["Трудоёмкость"].Range.Tables[1];
-            Cell semCell = trudTable.Cell(3, 3);
+            Table compTable = _template.Bookmarks["Компетенции"].Range.Tables[1];
+
+            int i = 3;
+            foreach (var kv in _disc.Competentions)
+            {
+                compTable.Rows.Add();
+                compTable.Cell(i, 1).Range.Text = (i - 2).ToString();
+                compTable.Cell(i, 2).Range.Text = kv.Key;
+                compTable.Cell(i, 3).Range.Text = kv.Value;
+
+                i++;
+            }
+        }
+
+        void pasteInCellWorkInfo(int row, int column, int sem, Table tb, WorkInfo wi)
+        {
+            tb.Cell(row, column).Range.Text = wi == null ? "-" : wi.HoursOnSemester(sem).ToString();
+        }
+
+        void formatTrudTable()
+        {
+            Table trudTable = _template.Bookmarks["Трудоёмкость"].Range.Tables[1];
 
             int semCount = _disc.Semester.Semesters.Count();
             for (int i = 3; i <= trudTable.Rows.Count; i++)
             {
                 trudTable.Cell(i, 3).Split(1, semCount);
-                counter++;
             }
 
             // Колонки с семестрами
@@ -63,47 +98,49 @@ namespace RPDGenerator.Interops
                 int currSem = _disc.Semester.Semesters[j - 3];
 
                 trudTable.Cell(3, j).Range.Text = currSem.ToString();
-                counter++;
 
                 // Лекции
-                if (_disc.Lectures != null)
-                {
-                    trudTable.Cell(5, j).Range.Text = _disc.Lectures.HoursOnSemester(currSem).ToString();
-                    counter++;
-                }
-                
+                pasteInCellWorkInfo(5, j, currSem, trudTable, _disc.Lectures);
+
                 // Лабы
-                if (_disc.Laboratory != null)
-                {
-                    trudTable.Cell(6, j).Range.Text = _disc.Laboratory.HoursOnSemester(currSem).ToString();
-                    trudTable.Cell(7, j).Range.Text = _disc.Laboratory.HoursOnSemester(currSem).ToString();
-                    counter += 2;
-                }
+                pasteInCellWorkInfo(6, j, currSem, trudTable, _disc.Laboratory);
+                pasteInCellWorkInfo(7, j, currSem, trudTable, _disc.Laboratory);
 
                 // Практики
-                if (_disc.Practice != null)
-                {
-                    trudTable.Cell(8, j).Range.Text = _disc.Practice.HoursOnSemester(currSem).ToString();
-                    trudTable.Cell(9, j).Range.Text = _disc.Practice.HoursOnSemester(currSem).ToString();
-                    counter += 2;
-                }
+                pasteInCellWorkInfo(8, j, currSem, trudTable, _disc.Practice);
+                pasteInCellWorkInfo(9, j, currSem, trudTable, _disc.Practice);
 
                 // Сам. Работы
-                if (_disc.Independent != null)
-                {
-                    trudTable.Cell(10, j).Range.Text = _disc.Independent.HoursOnSemester(currSem).ToString();
-                    counter++;
-                }
+                pasteInCellWorkInfo(10, j, currSem, trudTable, _disc.Independent);
+            }
+        }
+
+        void formatDiscThemes()
+        {
+            Table themesTable = _template.Bookmarks["ТемыДисциплины"].Range.Tables[1];
+
+            for (int i = 2; i <= themesTable.Rows.Count; i++)
+            {
+                themesTable.Cell(i, 2).Split(1, _disc.Competentions.Count);
+            }
+
+            int columnCount = 2;
+            foreach(var comp in _disc.Competentions.Keys)
+            {
+                themesTable.Cell(2, columnCount).Range.Text = comp;
+
+                columnCount++;
             }
         }
 
         public WordProcess(Dictionary<string, string> tagsComm, Dictionary<string, string> tagsDisc, 
-            Discipline disc, FileInfo template)
+            Discipline disc, string tempPath, Document template)
         {
             _tagsComm = tagsComm;
             _tagsDisc = tagsDisc;
             _disc = disc;
             _template = template;
+            _tempPath = tempPath;
         }
 
         public void Process(Application app)
@@ -114,24 +151,16 @@ namespace RPDGenerator.Interops
             foreach (var tag in _tagsComm)
                 findExecute(tag.Key, tag.Value);
 
-            ProcessDiscipline(app);
-        }
+            foreach (var tag in _tagsDisc)
+                findExecute(tag.Key, tag.Value);
 
-        public void ProcessDiscipline(Application app)
-        {
-            int countUndo = 0;
-            _selection = app.Selection;
-            _find = _selection.Find;
+            replaceCompetentions();
+            formatCompTable();
+            formatTrudTable();
+            formatDiscThemes();
 
-            foreach(var tag in _tagsDisc)
-            {
-                countUndo += findExecute(tag.Key, tag.Value) ? 1 : 0;
-            }
-
-            formatTrudTable(app, ref countUndo);
-
-            app.ActiveDocument.SaveAs2(getPath());
-            app.ActiveDocument.Undo(countUndo);
+            _template.SaveAs2(getPath());
+            _template.Close();
         }
     }
 }

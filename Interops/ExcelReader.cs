@@ -14,8 +14,9 @@ namespace RPDGenerator.Interops
         Workbooks _workBooks;
         Workbook _workBook;
         Worksheet _title;
+        Worksheet _comps;
         Worksheet _plan;
-        Range _planRange;
+        Range _range;
 
         void parseLessonCell(string cellCnt, int sem, ref WorkInfo les, in SemesterInfo si)
         {
@@ -28,6 +29,19 @@ namespace RPDGenerator.Interops
 
                 les.SetOn(sem, hours);
             }
+        }
+
+        Dictionary<string, string> parseCompetentionCell(string cellCnt, 
+            in Dictionary<string, string> allComps)
+        {
+            string[] comps = cellCnt?.Split(new char[] {';', ' '}, StringSplitOptions.RemoveEmptyEntries);
+            Dictionary<string, string> discComps = new Dictionary<string, string>();
+            foreach(var c in comps)
+            {
+                discComps[c] = allComps[c];
+            }
+
+            return discComps;
         }
 
         /// <summary>
@@ -59,16 +73,31 @@ namespace RPDGenerator.Interops
                 ((Range)_title.Cells[32, 2]).Value2);
             int year              = int.Parse(((Range)_title.Cells[30, 21]).Value2);
 
+            // Компетенции
+            _comps = _workBook.Sheets[5];
+            _range = _comps.UsedRange;
+            object[,] compsArr = (object[,])_range.Value[XlRangeValueDataType.xlRangeValueDefault];
+
+            Dictionary<string, string> allComps = new Dictionary<string, string>(128);
+            for (int compRow = 1; compRow < compsArr.GetLength(0); compRow++)
+            {
+                if (compsArr[compRow, 2] != null)
+                {
+                    string compName = ((string)compsArr[compRow, 2]).Trim();
+                    allComps[compName] = (string)compsArr[compRow, 4];
+                }
+            }
+
             // План
             _plan = _workBook.Sheets[4];
-            _planRange = _plan.UsedRange;
-            object[,] valArr = (object[,])_planRange.Value[XlRangeValueDataType.xlRangeValueDefault];
+            _range = _plan.UsedRange;
+            object[,] valArr = (object[,])_range.Value[XlRangeValueDataType.xlRangeValueDefault];
 
             List<Discipline> disciplines = new List<Discipline>(128);
-            for (int i = 1; i < valArr.GetLength(0); i++)
+            for (int discRow = 1; discRow < valArr.GetLength(0); discRow++)
             {
-                string discCode = valArr[i, 2]?.ToString();
-                string discName = valArr[i, 3]?.ToString();
+                string discCode = valArr[discRow, 2]?.ToString();
+                string discName = valArr[discRow, 3]?.ToString();
 
                 if (discCode is null || discName is null)
                     continue;
@@ -83,7 +112,7 @@ namespace RPDGenerator.Interops
 
                     for (int j = 4; j < 10; j++)
                     {
-                        string workInfoSems = (string)valArr[i, j];
+                        string workInfoSems = (string)valArr[discRow, j];
                         if (workInfoSems == null) workInfoSems = "";
 
                         if (workInfoSems.Length > 0)
@@ -101,12 +130,15 @@ namespace RPDGenerator.Interops
 
                     for (int j = 18, s = 1; (string)valArr[3, j] == "з.е." && s <= 16; j += 7, s++)
                     {
-                        parseLessonCell((string)valArr[i, j + 2], s, ref lesInfos[0], si);
-                        parseLessonCell((string)valArr[i, j + 3], s, ref lesInfos[1], si);
-                        parseLessonCell((string)valArr[i, j + 4], s, ref lesInfos[2], si);
-                        parseLessonCell((string)valArr[i, j + 5], s, ref lesInfos[3], si);
-                        parseLessonCell((string)valArr[i, j + 6], s, ref lesInfos[4], si);
+                        parseLessonCell((string)valArr[discRow, j + 2], s, ref lesInfos[0], si);
+                        parseLessonCell((string)valArr[discRow, j + 3], s, ref lesInfos[1], si);
+                        parseLessonCell((string)valArr[discRow, j + 4], s, ref lesInfos[2], si);
+                        parseLessonCell((string)valArr[discRow, j + 5], s, ref lesInfos[3], si);
+                        parseLessonCell((string)valArr[discRow, j + 6], s, ref lesInfos[4], si);
                     }
+
+                    Dictionary<string, string> comps = parseCompetentionCell(
+                        (string)valArr[discRow, valArr.GetLength(1)], allComps);
 
                     Discipline disc = new Discipline(discCode, discName);
                     disc.Semester = si;
@@ -121,6 +153,7 @@ namespace RPDGenerator.Interops
                     disc.Practice = lesInfos[2];
                     disc.Independent = lesInfos[3];
                     disc.Control = lesInfos[4];
+                    disc.Competentions = comps;
                     disciplines.Add(disc);
                 }
             }
@@ -133,6 +166,7 @@ namespace RPDGenerator.Interops
             da.EducationType = edType;
             da.YearOfEntrance = year;
             da.Disciplines = disciplines;
+            da.Competentions = allComps;
 
             return da;
         }
@@ -148,14 +182,16 @@ namespace RPDGenerator.Interops
             while (Marshal.ReleaseComObject(_workBook) > 0) { }
             while (Marshal.ReleaseComObject(_workBooks) > 0) { }
             while (Marshal.ReleaseComObject(_title) > 0) { }
+            while (Marshal.ReleaseComObject(_comps) > 0) { }
             while (Marshal.ReleaseComObject(_plan) > 0) { }
-            while (Marshal.ReleaseComObject(_planRange) > 0) { }
+            while (Marshal.ReleaseComObject(_range) > 0) { }
 
             _app = null;
             _workBook = null;
             _title = null;
+            _comps = null;
             _plan = null;
-            _planRange = null;
+            _range = null;
 
             GC.Collect();
             GC.WaitForPendingFinalizers();
