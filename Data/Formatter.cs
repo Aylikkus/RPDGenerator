@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 
 namespace RPDGenerator.Data
 {
-    static class Formatter
+    public static class Formatter
     {
         public static string GetSpecialization(string text)
         {
