@@ -1,6 +1,6 @@
 /Excel
-/bin
-/obj
+**/bin
+**/obj
 /.vs
 /РП ИАС 2021 - doc
 *.lnk
